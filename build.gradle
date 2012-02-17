@@ -1,0 +1,87 @@
+apply plugin: 'groovy'
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'maven'
+
+//apply from: 'publish.gradle'
+
+repositories {
+    mavenRepo url: 'http://repo.enonic.com/maven'
+    mavenCentral()
+}
+archivesBaseName = 'ert-gradle-plugin'
+group = 'com.enonic.cms.tools'
+version = '1.0.1-SNAPSHOT'
+
+configurations {
+
+    includeLib
+    compile.extendsFrom includeLib
+
+    deployerJars
+}
+
+
+dependencies {
+
+    compile gradleApi()
+    groovy localGroovy()
+
+    includeLib 'commons-lang:commons-lang:2.6'
+
+    includeLib 'org.apache.jackrabbit:jackrabbit-webdav:2.2.9'
+
+    includeLib 'com.google.guava:guava:10.0'
+
+    includeLib 'org.apache.commons:commons-vfs2:2.0'
+
+    includeLib 'commons-collections:commons-collections:3.2.1'
+
+    testCompile 'junit:junit:4.8'
+
+    testRuntime 'org.apache.commons:commons-compress:1.1'
+
+    deployerJars "org.apache.maven.wagon:wagon-http:1.0-beta-2"
+}
+
+jar {
+    from { configurations.includeLib.collect { it.isDirectory() ? it : zipTree(it) } }
+}
+
+dependencies {
+    deployerJars "org.apache.maven.wagon:wagon-http:2.0"
+}
+
+uploadArchives {
+    repositories.mavenDeployer {
+        configuration = configurations.deployerJars
+        //uniqueVersion = false
+        //uploadDescriptor = false
+        repository(url: 'http://repo.enonic.com/nexus/content/repositories/public-release/') {
+            authentication(userName: 'rmy', password: '')
+        }
+        snapshotRepository(url: 'http://repo.enonic.com/nexus/content/repositories/public-snapshot/') {
+            authentication(userName: 'rmy', password: '')
+        }
+
+        pom.project {
+            organization {
+                name = 'Enonic AS'
+                url = 'http://www.enonic.com'
+            }
+        }
+    }
+}
+
+task publish(dependsOn: 'uploadArchives') {
+    group = 'Upload'
+    description = 'Alias for uploadArchives'
+}
+
+
+
+
+
+
+
+
