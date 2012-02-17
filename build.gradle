@@ -3,12 +3,13 @@ apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'maven'
 
-//apply from: 'publish.gradle'
+apply from: 'settings.gradle'
 
 repositories {
     mavenRepo url: 'http://repo.enonic.com/maven'
     mavenCentral()
 }
+
 archivesBaseName = 'ert-gradle-plugin'
 group = 'com.enonic.cms.tools'
 version = '1.0.1-SNAPSHOT'
@@ -58,10 +59,10 @@ uploadArchives {
         //uniqueVersion = false
         //uploadDescriptor = false
         repository(url: 'http://repo.enonic.com/nexus/content/repositories/public-release/') {
-            authentication(userName: 'rmy', password: '')
+            authentication(userName: repoUsername, password: repoPassword)
         }
         snapshotRepository(url: 'http://repo.enonic.com/nexus/content/repositories/public-snapshot/') {
-            authentication(userName: 'rmy', password: '')
+            authentication(userName: repoUsername, password: repoPassword)
         }
 
         pom.project {
