@@ -7,6 +7,7 @@ h3. Quickstart
 1) Install gradle, one of the following:
 * Windows: Download and install gradle from "gradle.org":http://www.gradle.org
 * MAC: Install using "macports":http://macports.org or "brew":http://mxcl.github.com/homebrew/
+
 2) In you project directory, create a build.gradle file based on the sample file found here:
 3) Run "gradle tasks" to see available tasks
 4) run "gradle backupTest" to create local backup of test-server
