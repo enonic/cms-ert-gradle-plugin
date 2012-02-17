@@ -79,6 +79,11 @@ task publish(dependsOn: 'uploadArchives') {
     description = 'Alias for uploadArchives'
 }
 
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.0-milestone-8'
+    jarFile = 'wrapper/wrapper.jar'
+}
+
 
 
 

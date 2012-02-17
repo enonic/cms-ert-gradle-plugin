@@ -27,23 +27,17 @@ public class ERTPlugin implements Plugin<Project>
         project.convention.plugins.locations = locationConvention
 
         project.task('listLocations', description: 'Shows all defined locations', type: ERTListLocations)
-        /*
-        project.task('copy', description: 'Copy resources', type: ERTCopy)
-
-        project.task('diff', description: 'Diff between source and target', type: ERTDiff)
-
-        project.task('nukeCache', description: 'Nukes the cache for source', type: ERTNukeCache)
-
-        project.task('backup', description: 'Backup source to backup-root', type: ERTBackup)
-
-        project.task('sync', description: 'sync changes between source to target', type: ERTSync)
-        */
 
         project.tasks.withType(BaseTask.class).all {
             group = "Enonic Resource Tool"
         }
-    }
 
+        project.ERTSync = com.enonic.ert.tasks.ERTSync
+        project.ERTDiff = com.enonic.ert.tasks.ERTDiff
+        project.ERTNukeCache = com.enonic.ert.tasks.ERTNukeCache
+        project.ERTCopy = com.enonic.ert.tasks.ERTCopy
+        project.ERTBackup = com.enonic.ert.tasks.ERTBackup
+    }
 
     private LocationConvention setUpLocations(Project project)
     {
