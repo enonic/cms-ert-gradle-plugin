@@ -1,0 +1,86 @@
+apply plugin: 'ert'
+
+buildscript {
+    repositories {
+        mavenRepo url: 'http://repo.enonic.com/maven'
+    }
+    dependencies {
+        classpath 'com.enonic.cms.tools:ert-gradle-plugin:1.0.1-SNAPSHOT'
+    }
+}
+
+def excludeStatics = [
+        "/_public"
+]
+
+ert {
+    cacheUrl = "file://Users/rmh/Dev/Workspace/Java/LABS/.cache"
+    backupUrl = "file://Users/rmh/Dev/Workspace/Java/LABS/.backup"
+}
+
+locations {
+
+    local {
+        url = "file://Users/rmy/Dev/Workspace/Java/Enonic/project-myweb/"
+        excludes = excludeStatics
+    }
+
+    test {
+        url = "webdav://user:password@testserver:8080/myweb/dav"
+        cacheLocal = true
+        excludes = excludeStatics
+    }
+
+    prod {
+        url = "webdav://user:password@prodserver:8180/myweb/dav"
+        cacheLocal = true
+        excludes = excludeStatics
+    }
+}
+
+
+task backupTest(type: ERTBackup) {
+    source = "test"
+}
+
+task backupProd(type: ERTBackup) {
+    source = "test"
+}
+
+task diffTest(type: ERTDiff) {
+    source = "local"
+    target = "test"
+}
+
+task diffTest(type: ERTDiff) {
+    source = "local"
+    target = "prod"
+}
+
+task diffTestProd(type: ERTDiff) {
+    source = "test"
+    target = "prod"
+}
+
+task initLocal(type: ERTSync) {
+    source = "prod"
+    target = "local"
+}
+
+task syncTest(type: ERTSync) {
+    source = "local"
+    target = "test"
+}
+
+task syncTest(type: ERTSync) {
+    source = "local"
+    target = "prod"
+}
+
+task copyToTest(type: ERTCopy) {
+    fileName = "/packages"
+    source = "local"
+    target = "test"
+}
+
+
