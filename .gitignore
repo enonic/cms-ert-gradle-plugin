@@ -38,3 +38,7 @@ Thumbs.db
 *.iml
 *.ipr
 *.iws
+
+# Settings #
+############
+settings.gradle
