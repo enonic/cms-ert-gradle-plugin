@@ -7,9 +7,9 @@ Today, it is not obvious how to apply version control to manage the resources in
 ### Quickstart
 
 1. Install gradle, one of the following: 
-<br>Use the attached gradlew/gradlew 
-<br>Download and install from http://www.gradle.org 
-<br>Install using macports from http://macports.org
+<br> - Use the attached gradlew/gradlew 
+<br> - Download and install from http://www.gradle.org 
+<br> - Install using macports from http://macports.org
 2. Edit the sample configuration file: [sample build.gradle|ERT build.gradle sample] to match your environment, save as {{build.gradle}} to a local folder
 3. Open shell and cd to above folder
 4. run: "{{gradle tasks}}" to see available tasks
