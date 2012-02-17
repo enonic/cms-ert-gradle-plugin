@@ -8,11 +8,11 @@ Today, it is not obvious how to apply version control to manage the resources in
 
 1. Install gradle, one of the following: 
 
-1.1 Use the attached gradlew/gradlew 
+Use the attached gradlew/gradlew 
 
-1.2 Download and install from http://www.gradle.org 
+Download and install from http://www.gradle.org 
 
-1.3 Install using macports from http://macports.org
+Install using macports from http://macports.org
 
 2. Edit the sample configuration file: [sample build.gradle|ERT build.gradle sample] to match your environment, save as {{build.gradle}} to a local folder
 3. Open shell and cd to above folder
