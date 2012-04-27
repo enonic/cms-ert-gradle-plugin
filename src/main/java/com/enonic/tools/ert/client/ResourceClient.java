@@ -1,8 +1,5 @@
 package com.enonic.tools.ert.client;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.logging.Logger;
 
 import org.apache.commons.lang.StringUtils;
@@ -20,6 +17,7 @@ import com.enonic.tools.ert.resourcetree.ResourceTreeDiffResolver;
 import com.enonic.tools.ert.selector.DefaultResourceSelector;
 import com.enonic.tools.ert.selector.ResourceFileTools;
 import com.enonic.tools.ert.selector.ResourceSelector;
+import com.enonic.tools.ert.utils.BackupNameCreator;
 
 /**
  * Created by IntelliJ IDEA.
@@ -35,13 +33,12 @@ public class ResourceClient
 
     ResourceLocation target;
 
-    FileObject backuproot;
+    FileObject backupRoot;
 
     ResourceClientProperties properties;
 
     ResourceCache resourceCache;
 
-    protected static final SimpleDateFormat dateFormat = new SimpleDateFormat( "_dd.MM.yyyy_HH:mm" );
 
     public ResourceClient( ResourceLocation source, ResourceLocation target, ResourceCache resourceCache,
                            ResourceClientProperties properties )
@@ -132,25 +129,21 @@ public class ResourceClient
     {
         ResourceCopier resourceCopier = new ResourceCopier( true );
 
-        if ( backuproot == null )
+        if ( backupRoot == null )
         {
-            System.out.println( "Backup root not specified" );
+            LOG.severe( "Backup root not specified" );
             return;
         }
 
-        Date now = Calendar.getInstance().getTime();
-
-        String datePostFix = dateFormat.format( now );
-
-        final String backupName =
-            backuproot.getName().getPath() + "/" + convertPathToFileName( source.getRoot().getName().getPath() ) + "_" + datePostFix;
+        final String backupName = BackupNameCreator.createBackupName( backupRoot, source.getRoot() );
 
         System.out.println( "Creating backup: " + backupName );
 
-        FileObject backupLocation = backuproot.resolveFile( backupName );
+        FileObject backupLocation = backupRoot.resolveFile( backupName );
 
         resourceCopier.copy( source, backupLocation );
     }
+
 
     public void copyAll()
         throws Exception
@@ -191,11 +184,6 @@ public class ResourceClient
         throws Exception
     {
         resourceCache.nukeCache( source );
-    }
-
-    private String convertPathToFileName( String path )
-    {
-        return path.replace( "/", "_" );
     }
 
     private ResourceTreeCompareResult compareResourceTrees( ResourceTree sourceTree, ResourceTree targetTree )
@@ -250,11 +238,11 @@ public class ResourceClient
 
     public FileObject getBackuproot()
     {
-        return backuproot;
+        return backupRoot;
     }
 
     public void setBackuproot( FileObject backuproot )
     {
-        this.backuproot = backuproot;
+        this.backupRoot = backuproot;
     }
 }

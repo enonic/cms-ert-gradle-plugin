@@ -1,15 +1,19 @@
 package com.enonic.tools.ert.client;
 
 
+import java.util.logging.Logger;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.vfs2.CacheStrategy;
 import org.apache.commons.vfs2.FileObject;
+import org.apache.commons.vfs2.FileSystemException;
 import org.apache.commons.vfs2.cache.DefaultFilesCache;
 import org.apache.commons.vfs2.impl.DefaultFileSystemManager;
 import org.apache.commons.vfs2.provider.local.DefaultLocalFileProvider;
 import org.apache.commons.vfs2.provider.webdav.WebdavFileProvider;
 
 import com.enonic.tools.ert.ResourceCache;
+import com.enonic.tools.ert.exception.LocationConnectionException;
 import com.enonic.tools.ert.exception.ResourceNotFoundException;
 
 /**
@@ -20,6 +24,9 @@ import com.enonic.tools.ert.exception.ResourceNotFoundException;
  */
 public class ResourceClientFactory
 {
+    private Logger LOG = Logger.getLogger( this.getClass().getName() );
+
+    public static final String LINEBREAK = System.getProperty( "line.separator" );
 
     final DefaultFileSystemManager fileSystemManager;
 
@@ -45,42 +52,72 @@ public class ResourceClientFactory
         {
             throw new IllegalArgumentException( "Source-url cannot be empty" );
         }
-
-        FileObject sourceRoot = fileSystemManager.resolveFile( sourceLocation.getUrl() );
-
-        if ( !sourceRoot.exists() )
-        {
-            throw new ResourceNotFoundException( sourceLocation );
-        }
-
-        sourceLocation.setRoot( sourceRoot );
-
-        FileObject targetRoot = null;
+        sourceLocation.setRoot( getLocationRoot( sourceLocation.getUrl(), false ) );
 
         if ( targetLocation != null && StringUtils.isNotBlank( targetLocation.getUrl() ) )
         {
-            targetRoot = fileSystemManager.resolveFile( targetLocation.getUrl() );
-
-            if ( !targetRoot.exists() )
-            {
-                System.out.println( "Target root does not exist, creating" );
-            }
-
-            targetLocation.setRoot( targetRoot );
+            targetLocation.setRoot( getLocationRoot( targetLocation.getUrl(), true ) );
         }
 
         String cacheDirRoot = properties.getLocalCacheDirRoot();
         String backupDirRoot = properties.getLocalBackupDirRoot();
 
-        FileObject localCacheRoot = fileSystemManager.resolveFile( cacheDirRoot );
-        FileObject backupRoot = fileSystemManager.resolveFile( backupDirRoot );
-
+        FileObject localCacheRoot = getLocationRoot( cacheDirRoot, true );
         ResourceCache resourceCache = new ResourceCache( localCacheRoot, fileSystemManager );
 
         ResourceClient client = new ResourceClient( sourceLocation, targetLocation, resourceCache, properties );
+
+        FileObject backupRoot = getLocationRoot( backupDirRoot, true );
         client.setBackuproot( backupRoot );
 
         return client;
+    }
+
+    private FileObject getLocationRoot( final String url, boolean createIfNotExists )
+        throws FileSystemException
+    {
+        FileObject locationRoot = null;
+
+        try
+        {
+            locationRoot = fileSystemManager.resolveFile( url );
+            locationRoot.getType();
+        }
+        catch ( FileSystemException e )
+        {
+            doHandleFileSystemException( e, url );
+        }
+
+        if ( !locationRoot.exists() )
+        {
+            if ( createIfNotExists )
+            {
+                System.out.println( "Target root: " + locationRoot + " does not exist, will be created" );
+            }
+            else
+            {
+                throw new ResourceNotFoundException( "Root resource not found on location " + url );
+            }
+        }
+
+        return locationRoot;
+    }
+
+
+    private void doHandleFileSystemException( FileSystemException e, String url )
+    {
+        StringBuffer buf = new StringBuffer();
+
+        Throwable cause = e.getCause();
+
+        while ( cause != null )
+        {
+            buf.append( LINEBREAK + "Caused by: " + cause.getMessage() );
+            cause = cause.getCause();
+        }
+
+        throw new LocationConnectionException( "Not able to connect to source location: " + url + buf.toString(), e );
+
     }
 
 }

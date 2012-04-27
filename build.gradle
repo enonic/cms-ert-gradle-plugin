@@ -12,7 +12,7 @@ repositories {
 
 archivesBaseName = 'ert-gradle-plugin'
 group = 'com.enonic.cms.tools'
-version = '1.0.1-SNAPSHOT'
+version = '1.0.2-SNAPSHOT'
 
 configurations {
 
@@ -49,22 +49,9 @@ jar {
     from { configurations.includeLib.collect { it.isDirectory() ? it : zipTree(it) } }
 }
 
-dependencies {
-    deployerJars "org.apache.maven.wagon:wagon-http:2.0"
-}
-
 uploadArchives {
     repositories.mavenDeployer {
-        configuration = configurations.deployerJars
-        //uniqueVersion = false
-        //uploadDescriptor = false
-        repository(url: 'http://repo.enonic.com/nexus/content/repositories/public-release/') {
-            authentication(userName: repoUsername, password: repoPassword)
-        }
-        snapshotRepository(url: 'http://repo.enonic.com/nexus/content/repositories/public-snapshot/') {
-            authentication(userName: repoUsername, password: repoPassword)
-        }
-
+        repository(url: 'http://leela.enonic/artifactory/public') 
         pom.project {
             organization {
                 name = 'Enonic AS'

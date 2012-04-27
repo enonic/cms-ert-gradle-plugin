@@ -15,11 +15,15 @@ public class ResourceNotFoundException
     extends RuntimeException
 {
 
-    public ResourceNotFoundException( ResourceLocation location )
+    public ResourceNotFoundException( final String s )
     {
-        super( "Location not found on location: " + location.getUrl() );
+        super( s );
     }
 
+    public ResourceNotFoundException( final String s, final Throwable throwable )
+    {
+        super( s, throwable );
+    }
 
     public ResourceNotFoundException( ResourceLocation location, String fileName )
     {
