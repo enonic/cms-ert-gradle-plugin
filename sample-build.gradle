@@ -5,7 +5,7 @@ buildscript {
         mavenRepo url: 'http://repo.enonic.com/maven'
     }
     dependencies {
-        classpath 'com.enonic.cms.tools:ert-gradle-plugin:1.0.1-SNAPSHOT'
+        classpath 'com.enonic.cms.tools:ert-gradle-plugin:1.0.2-SNAPSHOT'
     }
 }
 
