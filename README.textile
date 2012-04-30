@@ -40,10 +40,12 @@ https://github.com/enonic/ert-gradle-plugin/wiki/Ert-Configuration
 
 h2. Oxygen integration
 
-See [ERT - Oxygen integration]
+https://github.com/enonic/ert-gradle-plugin/wiki/Ert-Oxygen-Integration
 
 h2. Known bugs
 
+# Its not very robust with regards to special characters in resource-names
+
 h2. Future features / Todo
 
-See [ERT - Todo]
+
