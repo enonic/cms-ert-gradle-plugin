@@ -36,6 +36,7 @@ A typical flow using ERT will be:
 
 h2. Configuration
 
+https://github.com/enonic/ert-gradle-plugin/wiki/Ert-Configuration
 
 h2. Oxygen integration
 
