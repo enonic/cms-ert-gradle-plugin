@@ -8,7 +8,7 @@ h3. Quickstart
 * Windows: Download and install gradle from "gradle.org":http://www.gradle.org
 * MAC: Install using "macports":http://macports.org or "brew":http://mxcl.github.com/homebrew/
 
-2) In you project directory, create a build.gradle file based on the sample-build.gradle
+2) In you project directory, create a build.gradle file based on the sample-build.gradle:https://github.com/enonic/ert-gradle-plugin/blob/master/sample-build.gradle
 3) Run "gradle tasks" to see available tasks
 4) run "gradle backupTest" to create local backup of test-server
 5) run "gradle syncLocal" to fetch test-server to local disk
