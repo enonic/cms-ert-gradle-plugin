@@ -29,11 +29,14 @@ public class ResourceFileTools
         String sourceBaseName = getBasePath( source.getRoot() );
         String targetBaseName = getBasePath( target.getRoot() );
 
-        FileObject sourceFile = source.getRoot().resolveFile( sourceBaseName + "/" + fileRelativePath );
+        final String fileName = sourceBaseName + "/" + fileRelativePath;
+
+        FileObject sourceFile = source.getRoot().resolveFile( fileName );
 
         if ( !sourceFile.exists() )
         {
-            throw new ResourceNotFoundException( source.getRoot(), fileRelativePath );
+            System.out.println( "Warning: File not found: " + fileName + ", skipping" );
+            return;
         }
 
         System.out.println( "Copy sourcefile: " + sourceFile.getName() + " (" + Boolean.valueOf( sourceFile.exists() ).toString() + ")" );
