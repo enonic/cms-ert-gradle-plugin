@@ -33,9 +33,17 @@ public class ResourceFileTools
 
         FileObject sourceFile = source.getRoot().resolveFile( fileName );
 
-        if ( !sourceFile.exists() )
+        try
         {
-            System.out.println( "Warning: File not found: " + fileName + ", skipping" );
+            if ( !sourceFile.exists() )
+            {
+                System.out.println( "Warning: File not found: " + fileName + ", skipping" );
+                return;
+            }
+        }
+        catch ( FileSystemException e )
+        {
+            System.out.println( "Warning: Not able to deterine if sourcefile exists, skip" );
             return;
         }
 
